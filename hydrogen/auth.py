@@ -7,6 +7,7 @@ class HydrogenKeystoneContext(object):
     @webob.dec.wsgify
     def __call__(self,req):
         # Determine the user ID
+        print req
         user_id = req.headers.get('X_USER_ID')
         if not user_id:
             return webob.exc.HTTPUnauthorized()

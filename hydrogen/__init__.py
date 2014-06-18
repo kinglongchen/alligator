@@ -1,5 +1,6 @@
+#encoding: utf-8
 '''
-Created on 2014Äê6ÔÂ10ÈÕ
+Created on 2014ï¿½ï¿½6ï¿½ï¿½10ï¿½ï¿½
 
 @author: sony
 '''

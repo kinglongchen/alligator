@@ -1,8 +1,13 @@
 #!/bin/python
+# encoding: utf-8
 from hydrogen.v1.controllers import Controller
 from common.rmsvman import RmSVManClass
 from common import db
 import cgi
+from hydrogen.svmanmod.common.svtarget import SvTarget
+from hydrogen import  policy
+from symbol import except_clause
+from common import exceptions as svmodexceptions
 #class Controller(object):
 #	def default(self,req,id):
 #		print "Start"
@@ -20,7 +25,7 @@ class Tenant(Controller):
         }
 class ServiceMan(Controller):
 	def __init__(self):
-		self.db_session
+		self.db_session=None
 		self.rmsvMan = RmSVManClass(self.db_session)
 		print "ListName!!!"
 	'''
@@ -29,154 +34,197 @@ class ServiceMan(Controller):
 		return html_f
 	'''
 	def index(self,req):
+		'''
 		user_id = req.environ['HTTP_X_USER_ID']
 		user_name = req.environ['HTTP_X_USER_NAME'] 
 		user_role = req.environ['HTTP_X_ROLES']
+		'''
+		
 		self.db_session=req.environ['db_session']
-		svs_data = db.getSvsInfo4All(self.db_session)
+		svs = db.getSvsInfo4All(self.db_session)
 		svs_json = {}
-		svs = []
-		for sv_data in svs_data:
-			sv={}
-			sv['sv_id']=sv_data['sv_id']
-			sv['sv_name']=sv_data['sv_name']
-			sv['authority_type']=sv_data['authority_type']
-			sv['sv_url']=sv_data['sv_url']
-			sv['vm_id']=sv_data['vm_id']
-			sv['user_id']=sv_data['user_id']
-			sv['sv_lang']=sv_data['sv_lang']
-			sv['sv_desc']=sv_data['sv_desc']
-			svs.append(sv)
+# 		svs = []
+# 		for sv_data in svs_data:
+# 			sv={}
+# 			sv['sv_id']=sv_data['sv_id']
+# 			sv['sv_name']=sv_data['sv_name']
+# 			sv['authority_type']=sv_data['authority_type']
+# 			sv['sv_url']=sv_data['sv_url']
+# 			sv['vm_id']=sv_data['vm_id']
+# 			sv['user_id']=sv_data['user_id']
+# 			sv['sv_lang']=sv_data['sv_lang']
+# 			sv['sv_desc']=sv_data['sv_desc']
+# 			svs.append(sv)
 		svs_json['svs']=svs
-		return svs
+		return svs_json
 	def show(self,req,id):
 		#print "START"
 		#print id
 # 		print "END"
 # 		return "Have id"+id
+		'''
 		user_id = req.environ['HTTP_X_USER_ID']
 		user_name = req.environ['HTTP_X_USER_NAME'] 
 		user_role = req.environ['HTTP_X_ROLES']
+		'''
+		print 'show'
+		print id
 		self.db_session=req.environ['db_session']
-		sv_data_list = db.getSvInfo4ID(self.db_session, id)
+		sv = db.getSvInfo4ID(self.db_session, id)
 		
 		sv_json={}
-		input_args=[]
-		input_arg={}
-		output_args=[]
-		output_arg={}
-		svs = []
-		sv={}
-		
-		sv_data=sv_data_list[0]
-		sv['sv_id']=sv_data['sv_id']
-		sv['sv_name']=sv_data['sv_name']
-		sv['authority_type']=sv_data['authority_type']
-		sv['sv_url']=sv_data['sv_url']
-		sv['vm_id']=sv_data['vm_id']
-		sv['user_id']=sv_data['user_id']
-		sv['sv_lang']=sv_data['sv_lang']
-		sv['sv_desc']=sv_data['sv_desc']
-		
-		for sv_data in sv_data_list:
-			if sv_data['arg_direct'] == 0:
-				input_arg={}
-				input_arg['sv_arg_id']=sv_data['sv_arg_id']
-				input_arg['arg_name'] = sv_data['arg__name']
-				input_arg['arg_type_id'] = sv_data['arg_type_id']
-				input_arg['arg_index'] = sv_data['arg_index']
-				input_arg['arg_type_name'] = sv_data['arg_type_name']
-				input_args.append(input_arg)
-			if sv_data['arg_direct'] == 1:
-				output_arg={}
-				output_arg['sv_arg_id']=sv_data['sv_arg_id']
-				output_arg['arg_name'] = sv_data['arg__name']
-				output_arg['arg_type_id'] = sv_data['arg_type_id']
-				output_arg['arg_index'] = sv_data['arg_index']
-				output_arg['arg_type_name'] = sv_data['arg_type_name']
-				output_args.append(output_arg)
-		
-		sv['input_arg_types']=input_args
-		sv['output_arg_types']=output_args
+# 		input_args=[]
+# 		input_arg={}
+# 		output_args=[]
+# 		output_arg={}
+# 		#svs = []
+# 		sv={}
+# 		
+# 		sv_data=sv_data_list[0]
+# 		sv['sv_id']=sv_data['sv_id']
+# 		sv['sv_name']=sv_data['sv_name']
+# 		sv['authority_type']=sv_data['authority_type']
+# 		sv['sv_url']=sv_data['sv_url']
+# 		sv['vm_id']=sv_data['vm_id']
+# 		sv['user_id']=sv_data['user_id']
+# 		sv['sv_lang']=sv_data['sv_lang']
+# 		sv['sv_desc']=sv_data['sv_desc']
+# 		
+# 		for sv_data in sv_data_list:
+# 			if sv_data['arg_direct'] == 0:
+# 				input_arg={}
+# 				input_arg['sv_arg_id']=sv_data['sv_arg_id']
+# 				input_arg['arg_name'] = sv_data['arg_name']
+# 				input_arg['arg_type_id'] = sv_data['arg_type_id']
+# 				input_arg['arg_index'] = sv_data['arg_index']
+# 				input_arg['arg_type_name'] = sv_data['arg_type_name']
+# 				input_args.append(input_arg)
+# 			if sv_data['arg_direct'] == 1:
+# 				output_arg={}
+# 				output_arg['sv_arg_id']=sv_data['sv_arg_id']
+# 				output_arg['arg_name'] = sv_data['arg_name']
+# 				output_arg['arg_type_id'] = sv_data['arg_type_id']
+# 				output_arg['arg_index'] = sv_data['arg_index']
+# 				output_arg['arg_type_name'] = sv_data['arg_type_name']
+# 				output_args.append(output_arg)
+# 		
+# 		sv['input_arg_types']=input_args
+# 		sv['output_arg_types']=output_args
 		sv_json['sv']=sv
-		return svs
+		return sv_json
 		
 	def create(self,req,body=None):
 		environ = req.environ
 		user_id = environ['HTTP_X_USER_ID']
 		self.db_session=environ['db_session']
 		# need to upgrade to use permission engine
+		#éªŒè¯æƒé™
+		context=environ['hydrogen.context']
+		action="deploy_service"
+		target=SvTarget.factory().to_dict()
+		policy.init()
+		try:
+			policy.enforce(context, action, target)
+		except Exception,e:
+			return e.msg
+		
 		'''
 		if user_role == 'nuser':
 			return "you have no permission to upload service"
 		'''
-		#µÇ¼Ç·şÎñµÄ»ù±¾ĞÅÏ¢µ½sv_tbÖĞ
+		#ç™»è®°æœåŠ¡çš„åŸºæœ¬ä¿¡æ¯åˆ°sv_tbä¸­
 		try:
 			request_body_size = int(environ.get('CONTENT_LENGTH',0))
 		except ValueError:
 			request_body_size=0
-		#fileds=cgi.FieldStorage(environ["wsgi.input"],environ=environ)
+		fileds=cgi.FieldStorage(environ["wsgi.input"],environ=environ)
 		
-		#ÓÃÓÚ²âÊÔµÄ´úÂë¶Î£º
-		fileds={}
-		
-		
-		
+		#ç”¨äºæµ‹è¯•çš„ä»£ç æ®µï¼š
+		#fileds={}
+		#print fileds
+		#print environ["wsgi.input"].read()
+		#print self.db_session
 		#insert sv_tb table about service information
 		sv_id=db.addSvInfo2TB(self.db_session, user_id, fileds)
-		
-		#µÇ¼Ç·şÎñµÄ²ÎÊıĞÅÏ¢µ½sv_arg_type_tbÖĞ
+		#ç™»è®°æœåŠ¡çš„å‚æ•°ä¿¡æ¯åˆ°sv_arg_type_tbä¸­
 		#insert service arg information into sv_arg_type_tb table
-		
 		db.addSvInputArg2TB(self.db_session, sv_id, fileds)
-		
 		db.addSvOutputArg2TB(self.db_session, sv_id, fileds)
-		
-		#½«ÎÄ¼şÉÏ´«µ½ĞéÄâ»ú
+		#å°†æ–‡ä»¶ä¸Šä¼ åˆ°è™šæ‹Ÿæœº
 		contenttype = environ['CONTENT_TYPE']
 		sv_file = fileds['svfile']
 		vm_id = fileds['vm_id'].value
 		sv_url=self.rmsvMan.addSv2Vm(vm_id,sv_id, sv_file,contenttype)
-		#½«¸üĞÂsv_tbÊı¾İ¿âÖĞÄêsv_urlĞÅÏ¢
+		#å°†æ›´æ–°sv_tbæ•°æ®åº“ä¸­å¹´sv_urlä¿¡æ¯
 		db.updatedSvUrl(self.db_session, sv_id, sv_url)
-		
 		return 'service upload successfully!!!'
-	def destory(self,req,id):
-		#1.»ñÈ¡·şÎñËùÔÚµÄĞéÄâ»ú
-		#2.µ÷ÓÃÉ¾³ıÃüÁî£¬É¾³ıĞéÄâ»úÉÏµÄ·şÎñ
-		#3.É¾³ısv_arg_type_tbÊı¾İ¿âÓë¸Ã·şÎñÏà¹ØµÄĞÅÏ¢£¬
-		#4.É¾³ısv_tbÉÏÓë¸Ã·şÎñÏà¹ØµÄÊı¾İ
+	def delete(self,req,id=None):
+		#1.è·å–æœåŠ¡æ‰€åœ¨çš„è™šæ‹Ÿæœº
+		#2.è°ƒç”¨åˆ é™¤å‘½ä»¤ï¼Œåˆ é™¤è™šæ‹Ÿæœºä¸Šçš„æœåŠ¡
+		#3.åˆ é™¤sv_arg_type_tbæ•°æ®åº“ä¸è¯¥æœåŠ¡ç›¸å…³çš„ä¿¡æ¯ï¼Œ
+		#4.åˆ é™¤sv_tbä¸Šä¸è¯¥æœåŠ¡ç›¸å…³çš„æ•°æ®
 		
-		#É¾³ıÔ¶³ÌĞéÄâ»úÉÏµÄ·şÎñ
+		#åˆ é™¤è¿œç¨‹è™šæ‹Ÿæœºä¸Šçš„æœåŠ¡
 		environ = req.environ
+		'''
 		user_id = environ['HTTP_X_USER_ID']
 		user_name = environ['HTTP_X_USER_NAME']
 		user_role = environ['HTTP_X_ROLES']
+		'''
+		
 		self.db_session=environ['db_session']
-		self.rmsvMan.deleteSvOnVM(id);
-		#É¾³ı±¾µØsv_arg_type_tbÉÏµÄÊı¾İ
+		
+		context=environ['hydrogen.context']
+		action="undeploy_service"
+		try:
+			target=SvTarget.svtarget_factory(self.db_session,id).to_dict()
+		except Exception,e:
+			return e.msg
+		policy.init()
+		try:
+			policy.enforce(context, action, target)
+		except Exception,e:
+			return e.msg
+		
+		
+		self.rmsvMan.deleteSvOnVM(self.db_session,id);
+		#åˆ é™¤æœ¬åœ°sv_arg_type_tbä¸Šçš„æ•°æ®
 		db.deleteSvInfoOnTB(self.db_session,id)
-		#É¾³ı±¾µØsv_tbÉÏµÄÊı¾İ
-		db.deleteSvAllArgOnTB(self.db_session,id)
+		#åˆ é™¤æœ¬åœ°sv_tbä¸Šçš„æ•°æ®
+		db.deleteSvArg4IDOnTB(self.db_session,id)
 		
-	def update(self,req,body,id):
+		return 'delete successfully!'
+	def update(self,req,body,id=None):
 		environ = req.environ
+		'''
 		user_id = environ['HTTP_X_USER_ID']
 		user_name = environ['HTTP_X_USER_NAME']
 		user_role = environ['HTTP_X_ROLES']
+		'''
 		self.db_session=environ['db_session']
-		#ĞŞ¸Äsv_arg_type_tb±í
+		context=environ['hydrogen.context']
+		action="deploy_service"
+		try:
+			target=SvTarget.svtarget_factory(self.db_session,id).to_dict()
+		except Exception,e:
+			return e.message
+		policy.init()
+		try:
+			policy.enforce(context, action, target)
+		except Exception,e:
+			return e.msg
+		#ä¿®æ”¹sv_arg_type_tbè¡¨
+		print body
+		print "#####################"
+		print body['input_arg_types']
 		input_arg_types=body.pop('input_arg_types')
 		for key in input_arg_types.keys():
-			db.updateSvArgtype(self.db_session,key,input_arg_types['key'])
+			db.updateSvArgtype(self.db_session,key,input_arg_types[key])
 		output_arg_types=body.pop('output_arg_types')
 		for key in output_arg_types.keys():
-			db.updateSvArgtype(self.db_session, key, input_arg_types['key'])
-		
-		#ĞŞ¸Äsv_tb±í
+			db.updateSvArgtype(self.db_session, key, output_arg_types[key])
+		print "#####################"
+		print body
+		#ä¿®æ”¹sv_tbè¡¨
 		db.updateSvTB(self.db_session, id, body)
-			
-			
-			
-		
-		
+		return 'update successfully!!!'

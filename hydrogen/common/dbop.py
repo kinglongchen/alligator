@@ -14,7 +14,7 @@ class Mysql(object):
 		except Exception, e:
 			print e
 			sys.exit()
-		self.cursor = self.conn.cursor()
+		self.cursor = self.conn.cursor(MySQLdb.cursors.DictCursor)
 	
 	def execute4DML(self,sql):
 		self.cursor.execute(sql)
@@ -22,7 +22,8 @@ class Mysql(object):
 		self.conn.commit()
 		return id
 	def execute4DQL(self,sql):
-		return self.cursor.execute(sql)
+		self.cursor.execute(sql)
+		return self.cursor.fetchall()
 	def query(self,sql):
 		return self.execute4DQL(sql)
 	def insert(self, sql):

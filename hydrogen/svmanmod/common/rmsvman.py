@@ -1,5 +1,6 @@
+# encoding: utf-8
 '''
-Created on 2014Äê6ÔÂ11ÈÕ
+Created on 2014ï¿½ï¿½6ï¿½ï¿½11ï¿½ï¿½
 
 @author: sony
 '''
@@ -13,23 +14,21 @@ class RmSVManClass(object):
 		self.multipartencode=MultiPartEncode()
 		
 	def upload_file(self,vm_ip,contenttype,data):
-		r = urllib2.Request("http://"+vm_ip+":8089/fileupload.app")
+		r = urllib2.Request("http://"+vm_ip+":8091/v1/filedeploy")
 		r.add_unredirected_header('Content-Type',contenttype)
 		r.add_data(data)
 		u = urllib2.urlopen(r)
 		return u
 
-	def delete_file(self,vm_ip):
-		'''
-		req_url=""#webseverµ÷ÓÃurl
-		r.urllib2.Request(req_url)
-		u=urllib2.urlopen(r)
-		return u
-		'''
+	def delete_file(self,vm_ip,sv_id):
+		r = urllib2.Request("http://"+vm_ip+":8091/v1/fileundeploy/"+str(sv_id))
+		return urllib2.urlopen(r)
+		
 		pass
 	def addSv2Vm(self,vm_id,sv_id,sv_file,contenttype):
+		sv_id=str(sv_id)
 		vm_ip=vmmanmod_client.get_vm_ip(vm_id)
-		sv_url = 'http://'+vm_ip+":8091/v1/svs/"+sv_id
+		sv_url = 'http://'+str(vm_ip)+":8091/v1/svs/"+str(sv_id)
 		
 		sv_filename=sv_id+"."+sv_file.filename.split('.')[-1].strip()
 		boundary=contenttype.split(';')[-1].split("=")[-1].strip()
@@ -38,9 +37,10 @@ class RmSVManClass(object):
 		self.upload_file(vm_ip, contenttype, sv_data)
 		return sv_url
 		
-	def deleteSvOnVM(self,id):
-		#1.¸ù¾Ýid»ñµÃ·þÎñËùÔÚvm
-		#2.µ÷ÓÃÔ¶³Ì´úÀí--Ò»¸öwebServer--É¾³ýÔ¶³ÌvmÉÏµÄ·þÎñ³ÌÐò
-		sv_vmip=db.getSvVmip(self.db_session, id)
-		self.delete_file(sv_vmip)
-		
+	def deleteSvOnVM(self,db_session,id):
+		#1.ï¿½ï¿½ï¿½idï¿½ï¿½Ã·ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½vm
+		#2.ï¿½ï¿½ï¿½ï¿½Ô¶ï¿½Ì´ï¿½ï¿½ï¿½--Ò»ï¿½ï¿½webServer--É¾ï¿½ï¿½Ô¶ï¿½ï¿½vmï¿½ÏµÄ·ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+		sv_vmip=db.getSvVmip(db_session, id)
+		self.delete_file(sv_vmip,id)
+		print 'delete sv On VM successuflly!!!'
+		return 'ture'

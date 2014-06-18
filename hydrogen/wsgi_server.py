@@ -2,7 +2,7 @@
 from paste.deploy import loadapp
 import os
 import sys
-sys.path.append('.')
+sys.path.append('..')
 HOST = ''
 PORT = 8089
 config = "python_paste.ini"

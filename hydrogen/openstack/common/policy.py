@@ -66,9 +66,9 @@ import urllib2
 #from openstack.common.gettextutils import _
 from openstack.common import jsonutils
 #from openstack.common import log as logging
+import logging
 
-
-#LOG = logging.getLogger(__name__)
+LOG = logging.getLogger(__name__)
 
 
 _rules = None

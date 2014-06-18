@@ -1,0 +1,13 @@
+eclipse.preferences.version=1
+encoding//hydrogen/Server.py=utf-8
+encoding//hydrogen/Test/svman/updateTest.py=utf-8
+encoding//hydrogen/__init__.py=utf-8
+encoding//hydrogen/common/target.py=utf-8
+encoding//hydrogen/svmanmod/common/db.py=utf-8
+encoding//hydrogen/svmanmod/common/exceptions.py=utf-8
+encoding//hydrogen/svmanmod/common/rmsvman.py=utf-8
+encoding//hydrogen/svmanmod/common/svtarget.py=utf-8
+encoding//hydrogen/svmanmod/controllers.py=utf-8
+encoding//hydrogen/svmodproxy/common/__init__.py=utf-8
+encoding//hydrogen/svmodproxy/common/svfileman.py=utf-8
+encoding//hydrogen/svtest2/controllers.py=utf-8

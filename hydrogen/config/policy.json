@@ -1,7 +1,16 @@
 {
-    "context_is_admin":  "role:dev",
-    "owner":  "tenant_id:%(tenant_id)s",
-    "admin_or_owner":  "is_admin:True or tenant_id:%(tenant_id)s",
-    "default": "rule:admin_or_owner",
-    "get_test_action":"rule:owner"
+    "context_is_admin":  "role:admin",
+    "context_is_dev":  "role:dev",
+	"context_is_nuser":  "role:nuser",
+	"is_admin":"role:admin",
+    "user_owner": "user_id:%(user_id)s",
+    "admin_or_dev_owner":"rule:is_admin or role:dev",
+    "admin_or_user_owner":"rule:is_admin or user_id:%(user_id)s",
+    "default": "rule:admin_or_user_owner",
+    "get_test_action":"rule:admin_or_user_owner",
+    "get_all_servcie":"",
+	"get_service_detail":"",
+    "undeploy_service":"rule:admin_or_user_owner",
+	"deploy_service":"rule:admin_or_dev_owner",
+	"update_service":"(rule:context_is_admin or rule:context_is_dev) and rule:user_owner"
 }

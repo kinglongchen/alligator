@@ -1,4 +1,4 @@
-from hydrogen.common.dbop import Mysql
+from common.dbop import Mysql
 import webob.dec
 import webob.exc
 class DBSessionWrapper(object):
