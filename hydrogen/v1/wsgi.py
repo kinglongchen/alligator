@@ -6,6 +6,7 @@ import routes.middleware
 import webob
 import webob.dec
 import webob.exc
+#from hydrogen.common.logger import logger
 
 class APIMapper(routes.Mapper):
     """
@@ -89,6 +90,7 @@ class JSONRequestDeserializer(object):
         Returns whether a Webob.Request object will possess an entity body.
 
         :param request:  Webob.Request object
+        
         """
         if 'transfer-encoding' in request.headers:
             return True
@@ -103,9 +105,10 @@ class JSONRequestDeserializer(object):
 
     def from_json(self, datastring):
         try:
+            #print datastring
             return json.loads(datastring, object_hook=self._sanitizer)
         except ValueError:
-            msg = _('Malformed JSON in request body.')
+            msg = 'Malformed JSON in request body.'
             raise webob.exc.HTTPBadRequest(explanation=msg)
 
     def default(self, request):

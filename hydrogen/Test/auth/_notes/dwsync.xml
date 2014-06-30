@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <dwsync>
-<file name="get_token.py" server="192.168.0.12//root/alligator/hydrogen/" local="130468751732701105" remote="130473844200000000" Dst="0" />
-<file name="openrc.sh" server="192.168.0.12//root/alligator/hydrogen/" local="130468761059550146" remote="130475273330000000" Dst="0" />
+<file name="get_token.py" server="192.168.0.12//root/alligator/hydrogen/" local="130473844200000000" remote="130473844200000000" Dst="0" />
+<file name="openrc.sh" server="192.168.0.12//root/alligator/hydrogen/" local="130475273330000000" remote="130475273330000000" Dst="0" />
+<file name="get_token.py" server="192.168.1.138//root/alligator/" local="130473844200000000" remote="130476505780000000" Dst="0" />
+<file name="openrc.sh" server="192.168.1.138//root/alligator/" local="130475273330000000" remote="130476505780000000" Dst="0" />
 </dwsync>

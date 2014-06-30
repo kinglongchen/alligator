@@ -12,5 +12,13 @@
 	"get_service_detail":"",
     "undeploy_service":"rule:admin_or_user_owner",
 	"deploy_service":"rule:admin_or_dev_owner",
-	"update_service":"(rule:context_is_admin or rule:context_is_dev) and rule:user_owner"
+	"update_service":"(rule:context_is_admin or rule:context_is_dev) and rule:user_owner",
+	"add_argtype":"rule:context_is_admin",
+	"delete_argtype":"rule:context_is_admin",
+	"update_argtype":"rule:context_is_admin",
+	"getallpolicyinfo":"rule:context_is_admin",
+	"getpolicy4svid":"rule:context_is_admin or (rule:context_is_dev and rule:user_owner)",
+	"addpolicy4svid":"rule:context_is_admin or (rule:context_is_dev and rule:user_owner)",
+	"deletepolicy4svid":"rule:context_is_admin or (rule:context_is_dev and rule:user_owner)",
+	"updatepolicy4svid":"rule:context_is_admin or (rule:context_is_dev and rule:user_owner)"
 }

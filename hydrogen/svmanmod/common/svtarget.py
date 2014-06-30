@@ -4,7 +4,7 @@ Created on 2014年6月16日
 
 @author: sony
 '''
-from common.target import Target
+from hydrogen.common.target import Target
 import db
 class SvTarget(Target):
 	def _get_target_info(self,db_session,sv_id):

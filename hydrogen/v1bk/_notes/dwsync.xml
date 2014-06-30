@@ -1,9 +1,15 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <dwsync>
-<file name="__init__.py" server="192.168.0.12//root/alligator/hydrogen/" local="130468751733051356" remote="130470967920000000" Dst="0" />
-<file name="__init__.pyc" server="192.168.0.12//root/alligator/hydrogen/" local="130468751733061361" remote="130470967920000000" Dst="0" />
-<file name="router.py" server="192.168.0.12//root/alligator/hydrogen/" local="130468751733071375" remote="130470967920000000" Dst="0" />
-<file name="router.pyc" server="192.168.0.12//root/alligator/hydrogen/" local="130468751733081380" remote="130470967920000000" Dst="0" />
-<file name="wsgi.py" server="192.168.0.12//root/alligator/hydrogen/" local="130468751733081380" remote="130470967920000000" Dst="0" />
-<file name="wsgi.pyc" server="192.168.0.12//root/alligator/hydrogen/" local="130468751733091385" remote="130470967920000000" Dst="0" />
+<file name="__init__.py" server="192.168.0.12//root/alligator/hydrogen/" local="130470967920000000" remote="130470967920000000" Dst="0" />
+<file name="__init__.pyc" server="192.168.0.12//root/alligator/hydrogen/" local="130470967920000000" remote="130470967920000000" Dst="0" />
+<file name="router.py" server="192.168.0.12//root/alligator/hydrogen/" local="130470967920000000" remote="130470967920000000" Dst="0" />
+<file name="router.pyc" server="192.168.0.12//root/alligator/hydrogen/" local="130470967920000000" remote="130470967920000000" Dst="0" />
+<file name="wsgi.py" server="192.168.0.12//root/alligator/hydrogen/" local="130470967920000000" remote="130470967920000000" Dst="0" />
+<file name="wsgi.pyc" server="192.168.0.12//root/alligator/hydrogen/" local="130470967920000000" remote="130470967920000000" Dst="0" />
+<file name="router.py" server="192.168.1.138//root/alligator/" local="130470967920000000" remote="130476505790000000" Dst="0" />
+<file name="router.pyc" server="192.168.1.138//root/alligator/" local="130470967920000000" remote="130476505790000000" Dst="0" />
+<file name="wsgi.py" server="192.168.1.138//root/alligator/" local="130470967920000000" remote="130476505790000000" Dst="0" />
+<file name="wsgi.pyc" server="192.168.1.138//root/alligator/" local="130470967920000000" remote="130476505790000000" Dst="0" />
+<file name="__init__.py" server="192.168.1.138//root/alligator/" local="130470967920000000" remote="130476505790000000" Dst="0" />
+<file name="__init__.pyc" server="192.168.1.138//root/alligator/" local="130470967920000000" remote="130476505790000000" Dst="0" />
 </dwsync>

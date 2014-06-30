@@ -8,6 +8,7 @@ class HydrogenKeystoneContext(object):
     def __call__(self,req):
         # Determine the user ID
         print req
+        print "#####################3"
         user_id = req.headers.get('X_USER_ID')
         if not user_id:
             return webob.exc.HTTPUnauthorized()

@@ -20,5 +20,8 @@ class Hello(Controller):
 		return "Hello world!!!"
 	def show(self,req,id):
 		return "Hello World!!!"+str(id)
-	def echo_hello(self,req):
-		return "echo_hello():Hello world!!!"
+	def echo_hello(self,req,id,sv_id):
+	#def echo_hello(self,req):
+		print id
+		print sv_id
+		return "echo_hello():Hello world!!! and id:"+str(id)+"and sv_id:"+str(sv_id)

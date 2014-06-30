@@ -8,6 +8,7 @@ from hydrogen.svmanmod.common.svtarget import SvTarget
 from hydrogen import  policy
 from symbol import except_clause
 from common import exceptions as svmodexceptions
+from hydrogen.common.exceptions import HydrogenException
 #class Controller(object):
 #	def default(self,req,id):
 #		print "Start"
@@ -43,18 +44,6 @@ class ServiceMan(Controller):
 		self.db_session=req.environ['db_session']
 		svs = db.getSvsInfo4All(self.db_session)
 		svs_json = {}
-# 		svs = []
-# 		for sv_data in svs_data:
-# 			sv={}
-# 			sv['sv_id']=sv_data['sv_id']
-# 			sv['sv_name']=sv_data['sv_name']
-# 			sv['authority_type']=sv_data['authority_type']
-# 			sv['sv_url']=sv_data['sv_url']
-# 			sv['vm_id']=sv_data['vm_id']
-# 			sv['user_id']=sv_data['user_id']
-# 			sv['sv_lang']=sv_data['sv_lang']
-# 			sv['sv_desc']=sv_data['sv_desc']
-# 			svs.append(sv)
 		svs_json['svs']=svs
 		return svs_json
 	def show(self,req,id):
@@ -73,49 +62,13 @@ class ServiceMan(Controller):
 		sv = db.getSvInfo4ID(self.db_session, id)
 		
 		sv_json={}
-# 		input_args=[]
-# 		input_arg={}
-# 		output_args=[]
-# 		output_arg={}
-# 		#svs = []
-# 		sv={}
-# 		
-# 		sv_data=sv_data_list[0]
-# 		sv['sv_id']=sv_data['sv_id']
-# 		sv['sv_name']=sv_data['sv_name']
-# 		sv['authority_type']=sv_data['authority_type']
-# 		sv['sv_url']=sv_data['sv_url']
-# 		sv['vm_id']=sv_data['vm_id']
-# 		sv['user_id']=sv_data['user_id']
-# 		sv['sv_lang']=sv_data['sv_lang']
-# 		sv['sv_desc']=sv_data['sv_desc']
-# 		
-# 		for sv_data in sv_data_list:
-# 			if sv_data['arg_direct'] == 0:
-# 				input_arg={}
-# 				input_arg['sv_arg_id']=sv_data['sv_arg_id']
-# 				input_arg['arg_name'] = sv_data['arg_name']
-# 				input_arg['arg_type_id'] = sv_data['arg_type_id']
-# 				input_arg['arg_index'] = sv_data['arg_index']
-# 				input_arg['arg_type_name'] = sv_data['arg_type_name']
-# 				input_args.append(input_arg)
-# 			if sv_data['arg_direct'] == 1:
-# 				output_arg={}
-# 				output_arg['sv_arg_id']=sv_data['sv_arg_id']
-# 				output_arg['arg_name'] = sv_data['arg_name']
-# 				output_arg['arg_type_id'] = sv_data['arg_type_id']
-# 				output_arg['arg_index'] = sv_data['arg_index']
-# 				output_arg['arg_type_name'] = sv_data['arg_type_name']
-# 				output_args.append(output_arg)
-# 		
-# 		sv['input_arg_types']=input_args
-# 		sv['output_arg_types']=output_args
 		sv_json['sv']=sv
 		return sv_json
 		
 	def create(self,req,body=None):
 		environ = req.environ
 		user_id = environ['HTTP_X_USER_ID']
+		user_name = environ['HTTP_X_USER_NAME'] 
 		self.db_session=environ['db_session']
 		# need to upgrade to use permission engine
 		#验证权限
@@ -138,16 +91,22 @@ class ServiceMan(Controller):
 		except ValueError:
 			request_body_size=0
 		fileds=cgi.FieldStorage(environ["wsgi.input"],environ=environ)
-		
+		if fileds['svfile'].filename is None:
+			return "No service file Error!"
 		#用于测试的代码段：
 		#fileds={}
 		#print fileds
 		#print environ["wsgi.input"].read()
 		#print self.db_session
 		#insert sv_tb table about service information
-		sv_id=db.addSvInfo2TB(self.db_session, user_id, fileds)
+		
+		try:
+			sv_id=db.addSvInfo2TB(self.db_session, user_id,user_name, fileds)
+		except HydrogenException,e:
+			return e.msg
 		#登记服务的参数信息到sv_arg_type_tb中
 		#insert service arg information into sv_arg_type_tb table
+		
 		db.addSvInputArg2TB(self.db_session, sv_id, fileds)
 		db.addSvOutputArg2TB(self.db_session, sv_id, fileds)
 		#将文件上传到虚拟机
@@ -158,6 +117,7 @@ class ServiceMan(Controller):
 		#将更新sv_tb数据库中年sv_url信息
 		db.updatedSvUrl(self.db_session, sv_id, sv_url)
 		return 'service upload successfully!!!'
+	
 	def delete(self,req,id=None):
 		#1.获取服务所在的虚拟机
 		#2.调用删除命令，删除虚拟机上的服务
@@ -228,3 +188,189 @@ class ServiceMan(Controller):
 		#修改sv_tb表
 		db.updateSvTB(self.db_session, id, body)
 		return 'update successfully!!!'
+
+
+class ArgTypeMan():
+	def __init__(self):
+		self.db_session=None
+	def index(self,req):
+		environ = req.environ
+		self.db_session=environ['db_session']
+		
+		#利用db查询数据库，并以json格式返回
+		arts_data = db.getArgTypeInfo(self.db_session)
+		arts={}
+		arts['ats'] = arts_data
+		return arts
+	
+# 	def show(self,req,id):
+# 		environ = req.environ
+# 		self.db_session=environ['db_session']
+		
+		
+	def create(self,req,body=None):
+		environ = req.environ
+		self.db_session=environ['db_session']
+		
+		context=environ['hydrogen.context']
+		action="add_argtype"
+		try:
+			target=SvTarget.factory().to_dict()
+		except Exception,e:
+			return e.msg
+		policy.init()
+		try:
+			policy.enforce(context, action, target)
+		except Exception,e:
+			return e.msg
+		
+		#增加数据类型信息到数据库中
+		db.addArgTypesInfo2TB(self.db_session,body)
+		return "add argtypes information successfully!!!"
+
+	def delete(self,req,id=None):
+		environ = req.environ
+		self.db_session=environ['db_session']
+		context=environ['hydrogen.context']
+		action="delete_argtype"
+		try:
+			target=SvTarget.factory().to_dict()
+		except Exception,e:
+			return e.msg
+		policy.init()
+		try:
+			policy.enforce(context, action, target)
+		except Exception,e:
+			return e.msg
+		
+		
+		#删除数据库中的信息
+		db.deleteArgType4ID(self.db_session,id)
+		return 'delete argtype information successfully!'        
+
+	def update(self,req,body,id=None):
+		environ = req.environ
+		self.db_session=environ['db_session']
+		context=environ['hydrogen.context']
+		action="update_argtype"
+		try:
+			target=SvTarget.factory().to_dict()
+		except Exception,e:
+			return e.msg
+		policy.init()
+		try:
+			policy.enforce(context, action, target)
+		except Exception,e:
+			return e.msg
+		
+		
+		db.updateArgTypeInfo4ID(self.db_session,id,body)
+		return 'update argtype information successfully!'
+
+class PolicyMan(object):
+	def __init__(self):
+		self.db_session=None
+	
+# 	def show(self,req,id):
+# 		pass
+	
+	def getAllPolicyInfo(self,req):
+		environ = req.environ
+		self.db_session=environ['db_session']
+		
+		context=environ['hydrogen.context']
+		action="getallpolicyinfo"
+		target=SvTarget.factory().to_dict()
+		policy.init()
+		try:
+			policy.enforce(context, action, target)
+		except Exception,e:
+			return e.msg
+		policies_info=db.getSvPolicyInfo4ALL(self.db_session)
+		policies={}
+		policies['policies']=policies_info
+		return policies
+		
+		
+		
+	def getPolicy4SVID(self,req,sv_id):
+		environ = req.environ
+		self.db_session=environ['db_session']
+		
+		
+
+		context=environ['hydrogen.context']
+		action="getpolicy4svid"
+		try:
+			target=SvTarget.svtarget_factory(self.db_session,sv_id).to_dict()
+		except Exception,e:
+			return e.msg
+		policy.init()
+		try:
+			policy.enforce(context, action, target)
+		except Exception,e:
+			return e.msg
+		
+		
+		svpolicy_info=db.getSvPolicyInfo4SVID(self.db_session, sv_id)
+		svpolicy={}
+		svpolicy['policy']=svpolicy_info
+		return svpolicy
+		
+		
+	def addPolicy4SVID(self,req,sv_id,body=None):
+		environ = req.environ
+		self.db_session=environ['db_session']
+		
+		context=environ['hydrogen.context']
+		action="addpolicy4svid"
+		try:
+			target=SvTarget.svtarget_factory(self.db_session,sv_id).to_dict()
+		except Exception,e:
+			return e.msg
+		policy.init()
+		try:
+			policy.enforce(context, action, target)
+		except Exception,e:
+			return e.msg
+		
+		
+		db.createSvPolicy(self.db_session, sv_id,body)
+		return 'insert policy information successfully!'
+	
+	def deletePolicy4SVID(self,req,sv_id,id):
+		environ = req.environ
+		self.db_session=environ['db_session']
+		
+		context=environ['hydrogen.context']
+		action="deletepolicy4svid"
+		try:
+			target=SvTarget.svtarget_factory(self.db_session,sv_id).to_dict()
+		except Exception,e:
+			return e.msg
+		policy.init()
+		try:
+			policy.enforce(context, action, target)
+		except Exception,e:
+			return e.msg
+		
+		
+		db.deleteSvPolicy4ID(self.db_session,sv_id,id)
+		return 'delete policy information successfully!'
+	
+	def updatePolicy4SVID(self,req,sv_id,id,body=None):
+		environ = req.environ
+		self.db_session=environ['db_session']
+		context=environ['hydrogen.context']
+		action="updatepolicy4svid"
+		try:
+			target=SvTarget.svtarget_factory(self.db_session,sv_id).to_dict()
+		except Exception,e:
+			return e.msg
+		policy.init()
+		try:
+			policy.enforce(context, action, target)
+		except Exception,e:
+			return e.msg
+		db.updateSvPolicy4ID(self.db_session, sv_id,id, body)
+		return  'update policy successfully!!!'

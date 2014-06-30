@@ -1,6 +1,15 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <dwsync>
-<file name="__init__.py" server="192.168.0.12//root/alligator/hydrogen/" local="130468751732731133" remote="130470967910000000" Dst="0" />
-<file name="controllers.py" server="192.168.0.12//root/alligator/hydrogen/" local="130470970665808187" remote="130470970720000000" Dst="0" />
-<file name="routers.py" server="192.168.0.12//root/alligator/hydrogen/" local="130470970395219023" remote="130470970450000000" Dst="0" />
+<file name="__init__.py" server="192.168.0.12//root/alligator/hydrogen/" local="130470967910000000" remote="130470967910000000" Dst="0" />
+<file name="controllers.py" server="192.168.0.12//root/alligator/hydrogen/" local="130470970720000000" remote="130470970720000000" Dst="0" />
+<file name="routers.py" server="192.168.0.12//root/alligator/hydrogen/" local="130470970450000000" remote="130470970450000000" Dst="0" />
+<file name="controllers.pyc" server="192.168.0.12//root/alligator/hydrogen/" local="130470970760000000" remote="130470970760000000" Dst="0" />
+<file name="routers.pyc" server="192.168.0.12//root/alligator/hydrogen/" local="130470970540000000" remote="130470970540000000" Dst="0" />
+<file name="__init__.pyc" server="192.168.0.12//root/alligator/hydrogen/" local="130470970060000000" remote="130470970060000000" Dst="0" />
+<file name="controllers.py" server="192.168.1.138//root/alligator/" local="130470970720000000" remote="130476505740000000" Dst="0" />
+<file name="controllers.pyc" server="192.168.1.138//root/alligator/" local="130470970760000000" remote="130476505740000000" Dst="0" />
+<file name="routers.py" server="192.168.1.138//root/alligator/" local="130470970450000000" remote="130476505740000000" Dst="0" />
+<file name="routers.pyc" server="192.168.1.138//root/alligator/" local="130470970540000000" remote="130476505740000000" Dst="0" />
+<file name="__init__.py" server="192.168.1.138//root/alligator/" local="130470967910000000" remote="130476505740000000" Dst="0" />
+<file name="__init__.pyc" server="192.168.1.138//root/alligator/" local="130470970060000000" remote="130476505740000000" Dst="0" />
 </dwsync>

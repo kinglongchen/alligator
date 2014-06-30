@@ -1,0 +1,18 @@
+------WebKitFormBoundaryqrVK0aPq2EUo1Lxi
+Content-Disposition: form-data; name="svfile"; filename="h.txt"
+Content-Type: text/plain
+
+hello test!!!
+------WebKitFormBoundaryqrVK0aPq2EUo1Lxi
+Content-Disposition: form-data; name="svname"
+
+12345
+------WebKitFormBoundaryqrVK0aPq2EUo1Lxi
+Content-Disposition: form-data; name="arg1"
+
+1
+------WebKitFormBoundaryqrVK0aPq2EUo1Lxi
+Content-Disposition: form-data; name="vm_id"
+
+1
+------WebKitFormBoundaryqrVK0aPq2EUo1Lxi--
