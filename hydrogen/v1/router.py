@@ -1,9 +1,11 @@
 #!/bin/python
 import wsgi
-import svtest.routers
-import svtest2.routers
-import svmanmod.routers
-import auths.routers
+import hydrogen.svtest.routers
+import hydrogen.svtest2.routers
+import hydrogen.svmanmod.routers
+import hydrogen.auths.routers
+import hydrogen.vmmanmod.routers
+import hydrogen.tcdb.routers
 class ControllerTest(object):
     def __init__(self):
         print "ControllerTest!!!!"
@@ -32,12 +34,14 @@ def auth_app_factory(global_conf, **local_conf):
     #conf = global_conf.copy()
     #conf.update(local_conf)
     return wsgi.ComposingRouter(wsgi.APIMapper(),
-                               [svtest.routers.Public(),
-                                svtest2.routers.SV2Public(),
-                                svmanmod.routers.Public()])
+                               [hydrogen.svtest.routers.Public(),
+                                hydrogen.svtest2.routers.SV2Public(),
+                                hydrogen.vmmanmod.routers.Public(),
+                                hydrogen.svmanmod.routers.Public(),
+                                hydrogen.tcdb.routers.Public()])
                                #token.routers.Router(),
                                #routers.VersionV2('public'),
                                #routers.Extension(False)])
 def public_app_factory(global_conf,**local_conf):
     return wsgi.ComposingRouter(wsgi.APIMapper(),
-                                [auths.routers.Public()])
+                                [hydrogen.auths.routers.Public()])

@@ -1,7 +1,0 @@
-{
-    "context_is_admin":  "role:dev",
-    "owner":  "tenant_id:%(tenant_id)s",
-    "admin_or_owner":  "is_admin:True or tenant_id:%(tenant_id)s",
-    "default": "rule:admin_or_owner",
-    "get_test_action":"rule:owner"
-}

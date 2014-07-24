@@ -42,7 +42,11 @@ class ServiceMan(Controller):
 		'''
 		
 		self.db_session=req.environ['db_session']
-		svs = db.getSvsInfo4All(self.db_session)
+		if req.GET.has_key('mine'):
+			req.GET.pop('mine')
+			req.GET.add('user_id',req.environ['HTTP_X_USER_ID'])
+			
+		svs = db.getSvsInfo4All(self.db_session,req.GET)
 		svs_json = {}
 		svs_json['svs']=svs
 		return svs_json
@@ -147,7 +151,7 @@ class ServiceMan(Controller):
 			return e.msg
 		
 		
-		self.rmsvMan.deleteSvOnVM(self.db_session,id);
+		print self.rmsvMan.deleteSvOnVM(self.db_session,id);
 		#删除本地sv_arg_type_tb上的数据
 		db.deleteSvInfoOnTB(self.db_session,id)
 		#删除本地sv_tb上的数据

@@ -22,4 +22,6 @@
 <file name="testsh.sh" server="192.168.1.138//root/alligator/" local="130474704370000000" remote="130476505780000000" Dst="0" />
 <file name="updateSvinfo4ID.sh" server="192.168.1.138//root/alligator/" local="130475423100000000" remote="130476505780000000" Dst="0" />
 <file name="updateTest.py" server="192.168.1.138//root/alligator/" local="130475273330000000" remote="130476505780000000" Dst="0" />
+<file name="sendfile2.sh" server="192.168.0.12//root/alligator/hydrogen/" local="130491918680000000" remote="130491918680000000" Dst="0" />
+<file name=".sendfile2.sh.swp" server="192.168.0.12//root/alligator/hydrogen/" local="130490058480000000" remote="130490058480000000" Dst="0" />
 </dwsync>

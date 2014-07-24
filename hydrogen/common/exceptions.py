@@ -85,5 +85,12 @@ class PolicyInitError(HydrogenException):
 class PolicyCheckError(HydrogenException):
     message = "Failed to check policy %(policy)s because %(reason)s"
 
-
+class NUllResourceIDException(HydrogenException):
+	message='Null Resource ID:%(id)s'
+	
+class DBaddValueError(HydrogenException):
+	message='The Request arguments:"%(valuename)s" Cannot be Null!!!'
+	
+class ProxyServerException(HydrogenException):
+	message='%(errormsg)s'
 

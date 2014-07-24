@@ -14,6 +14,7 @@ class DBSessionWrapper(object):
 	@webob.dec.wsgify
 	def __call__(self,req):
 		#print req.environ
+		
 		req.environ['db_session']=self.db_session
 		return self.app(req)
 	@classmethod

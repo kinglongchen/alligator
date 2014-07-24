@@ -5,7 +5,7 @@ import policy
 from common import exceptions
 
 class Hello(Controller):
-	def index(self,req):
+	def index(self,req,body=None):
 		#获得上下文对象context,该对象中保存了用户相关的信息
 		context= req.environ['hydrogen.context']
 		#构造target对象，该对象中保存了用户所请动作的一些信息，权限验证就是通过context和target的比较
@@ -17,6 +17,7 @@ class Hello(Controller):
 			policy.enforce(context,action,target)
 		except Exception,e:
 			return e.msg
+		print req.GET
 		return "Hello world!!!"
 	def show(self,req,id):
 		return "Hello World!!!"+str(id)

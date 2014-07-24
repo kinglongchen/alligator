@@ -8,7 +8,7 @@ import time
 import atexit
 from signal import SIGTERM 
 from paste.deploy import loadapp
-sys.path.append('.') 
+sys.path.append(os.path.split(os.getcwd())[0])
  
 class Daemon:
     """
@@ -142,8 +142,10 @@ class MyDaemon(Daemon):
         HOST = ''
         PORT = 8089
         config = self.path+"/python_paste.ini"
+        
         appname = "common"
-        print os.popen('pwd').readlines()[0]
+        
+        print os.popen('pwd').readlines()
         wsgi_app = loadapp("config:%s" % os.path.abspath(config), appname) 
         from eventlet import api,wsgi
         print 'Starting up HTTP server on %s: %i..........' %(HOST,PORT)

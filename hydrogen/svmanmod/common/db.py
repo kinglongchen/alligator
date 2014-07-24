@@ -6,7 +6,8 @@ Created on 2014��6��11��
 '''
 from exceptions import BadServiceIDException
 import exceptions
-import vmmanmod_client
+from hydrogen.common import vmclient
+from hydrogen.svmanmod.common.exceptions import BadQueryConditions
 def getSvVmip(db_session,id):
 	sql='select vm_id from sv_tb where sv_id= "'+str(id)+'"'
 	print sql
@@ -14,7 +15,7 @@ def getSvVmip(db_session,id):
 	if len(r)==0:
 		raise BadServiceIDException(sv_id=id)
 	vm_id=r[0]['vm_id']
-	vm_ip=vmmanmod_client.get_vm_ip(vm_id)
+	vm_ip=vmclient.get_vm_ip(vm_id)
 	return vm_ip
 
 def getSvUserID(db_session,id):
@@ -24,9 +25,45 @@ def getSvUserID(db_session,id):
 		raise BadServiceIDException(sv_id=id)
 	user_id=r[0]['user_id']
 	return user_id
-def getSvsInfo4All(db_session):
+def getSvsInfo4All(db_session,codis):
+	#条件查询
+	#1.根据sv_id查询
+	#2.根据sv_name查询
+	#3.根据authority_type查询
+	#4.根据sv_name查询vm_id查询
+	#5.根据user_id查询
+	#6.根据sv_lang查询
+	#7.根据upload_date的范围查询
+	for codi in codis.iterkeys():
+		print codi 
+	print '####################'
+	qkeys=['sv_id','sv_name','authority_type','vm_id','user_name','vm_name','sv_lang','from_date','to_date','user_id']
 	svs = []
-	sql ='select * from sv_tb order by sv_id'
+	sql ='select * from sv_tb'
+	
+	
+	if codis:
+		
+		qcodis=' '
+		from_date=codis.pop('from_date',None)
+		to_date=codis.pop('to_date',None)
+		if from_date and to_date:
+			qcodis+='unix_timestamp(upload_date) between unix_timestamp("'+from_date+'") and unix_timestamp("'+to_date+'") and '
+		elif not (not from_date and not to_date):
+			raise DateException(date_selc='from_date or to_date can not be null!')
+		
+		for key in codis.iterkeys():
+			
+			if key not in qkeys:
+				raise BadQueryConditions(qkey=key)
+			value=codis[key]
+			if value:
+				print key
+				qcodis+=key+'="'+value+'" and '
+		qcodis=qcodis[:-5]
+		sql +=' where'+qcodis
+	sql+=' order by sv_id'
+	print sql
 	svs_data=db_session.query(sql) 
 	if len(svs_data)==0:
 		return svs
@@ -52,7 +89,9 @@ def getSvInfo4ID(db_session,id):
 	output_arg={}
 	#svs = []
 	sv={}
-	sql = 'select sv_tb.sv_id as sv_id,sv_name,authority_type,sv_url,vm_id,user_id,user_name,sv_lang,sv_desc,upload_date,sv_arg_id,arg_name,sv_arg_type_tb.arg_type_id as arg_type_id,arg_index,arg_direct,arg_type_name from sv_tb,sv_arg_type_tb,arg_type_tb where sv_tb.sv_id='+str(id)+' and sv_tb.sv_id=sv_arg_type_tb.sv_id and sv_arg_type_tb.arg_type_id = arg_type_tb.arg_type_id order by sv_id,arg_index;'
+	#sql = 'select sv_tb.sv_id as sv_id,sv_name,authority_type,sv_url,vm_id,user_id,user_name,sv_lang,sv_desc,upload_date,sv_arg_id,arg_name,sv_arg_type_tb.arg_type_id as arg_type_id,arg_index,arg_direct,arg_type_name from sv_tb,sv_arg_type_tb,arg_type_tb where sv_tb.sv_id='+str(id)+' and sv_tb.sv_id=sv_arg_type_tb.sv_id and sv_arg_type_tb.arg_type_id = arg_type_tb.arg_type_id order by sv_id,arg_index;'
+	#print sql
+	sql = 'select * from sv_tb where sv_id="'+str(id)+'"'
 	sv_data_list=db_session.query(sql)
 	if len(sv_data_list)==0:
 		return sv
@@ -67,6 +106,12 @@ def getSvInfo4ID(db_session,id):
 	sv['sv_lang']=sv_data['sv_lang']
 	sv['sv_desc']=sv_data['sv_desc']
 	sv['upload_date']=sv_data['upload_date']
+	
+	sql = 'select sv_id,sv_arg_id,arg_name,sv_arg_type_tb.arg_type_id as arg_type_id,arg_index,arg_direct,arg_type_name from sv_arg_type_tb,arg_type_tb where sv_id="'+str(id)+'"'+' and sv_arg_type_tb.arg_type_id = arg_type_tb.arg_type_id order by sv_id,arg_index;'
+	
+	sv_data_list=db_session.query(sql)
+	if len(sv_data_list)==0:
+		return sv
 	for sv_data in sv_data_list:
 		if sv_data['arg_direct'] == 0:
 			input_arg={}
@@ -117,7 +162,7 @@ def addSvArgInfo2TB(db_session,sv_id,fileds,arg_direct=0):
 		arg_types_key='output_arg_types'
 	arg_index = 0
 	#arg_names=fileds[arg_names_key].value.split(';')
-	arg_names=fileds[arg_names_key]
+	arg_names=fileds.getvalue(arg_names_key,None)
 	
 	if arg_names is None:
 		return
@@ -125,15 +170,17 @@ def addSvArgInfo2TB(db_session,sv_id,fileds,arg_direct=0):
 	if not isinstance(arg_names, list):
 		arg_names=[arg_names]
 		
-	arg_type_ids = fileds[arg_types_key]
+	arg_type_ids = fileds.getvalue(arg_types_key,None)
+	if arg_type_ids is None:
+		return
 	if not isinstance(arg_type_ids, list):
 		arg_type_ids=[arg_type_ids]
 	
 	
 	for arg_type_id in arg_type_ids:
-		arg_name=arg_names[arg_index].value
+		arg_name=arg_names[arg_index]
 		arg_index+=1
-		arg_type_id=arg_type_id.value
+		arg_type_id=arg_type_id
 		
 		if arg_name is None:
 			arg_name="default_arg_name"

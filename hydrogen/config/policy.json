@@ -20,5 +20,9 @@
 	"getpolicy4svid":"rule:context_is_admin or (rule:context_is_dev and rule:user_owner)",
 	"addpolicy4svid":"rule:context_is_admin or (rule:context_is_dev and rule:user_owner)",
 	"deletepolicy4svid":"rule:context_is_admin or (rule:context_is_dev and rule:user_owner)",
-	"updatepolicy4svid":"rule:context_is_admin or (rule:context_is_dev and rule:user_owner)"
+	"updatepolicy4svid":"rule:context_is_admin or (rule:context_is_dev and rule:user_owner)",
+	"get_all_dbs":"",
+	"create_db":"",
+	"update_db4id":"rule:contxt_is_admin or rule:user_owner",
+	"delete_db4id":"rule:contxt_is_admin or rule:user_owner"
 }

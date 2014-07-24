@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<dwsync>
+<file name="get_token.py" server="192.168.0.12//root/alligator/hydrogen/" local="130475417800000000" remote="130500507460000000" Dst="0" />
+<file name="openrc.sh" server="192.168.0.12//root/alligator/hydrogen/" local="130475273330000000" remote="130500507460000000" Dst="0" />
+<file name="setenv.sh" server="192.168.0.12//root/alligator/hydrogen/" local="130475420490000000" remote="130500507460000000" Dst="0" />
+<file name="get_token.py" server="192.168.1.138//root/alligator/" local="130475417800000000" remote="130476505780000000" Dst="0" />
+<file name="openrc.sh" server="192.168.1.138//root/alligator/" local="130475273330000000" remote="130476505780000000" Dst="0" />
+<file name="setenv.sh" server="192.168.1.138//root/alligator/" local="130475420490000000" remote="130476505780000000" Dst="0" />
+<file name=".sendfile2.sh.swp" server="192.168.0.12//root/alligator/hydrogen/" local="130490058480000000" remote="130500507460000000" Dst="0" />
+<file name="createDB.sh" server="192.168.0.12//root/alligator/hydrogen/" local="130504986960000000" remote="130504986960000000" Dst="0" />
+<file name="deleteDB4ID.sh" server="192.168.0.12//root/alligator/hydrogen/" local="130500505067746726" remote="130504778980000000" Dst="0" />
+<file name="getDBinfo4ID.sh" server="192.168.0.12//root/alligator/hydrogen/" local="130500513800000000" remote="130500513800000000" Dst="0" />
+<file name="getDBs.sh" server="192.168.0.12//root/alligator/hydrogen/" local="130505008750000000" remote="130505008750000000" Dst="0" />
+<file name="updateDBinfo4ID.sh" server="192.168.0.12//root/alligator/hydrogen/" local="130504936660000000" remote="130504936660000000" Dst="0" />
+</dwsync>

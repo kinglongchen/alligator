@@ -1,0 +1,181 @@
+//创建数据库
+create database sc
+
+//创建表svtb--服务列表
+create table svtb
+(
+sv_id int unsigned not null  auto_increment,
+user_id int unsigned not null,
+sv_name varchar(20) not null,
+sv_ip varchar(15) not null,
+sv_port varchar(10) not null,
+sv_url varchar(100),
+primary key(sv_id)
+)engine=innodb default charset=utf8 auto_increment=1;
+
+//创建参数表svargtb
+
+create table svinargtb
+(
+sv_id int unsigned not null,
+arg_index int unsigned not null,
+arg_name varchar(20),
+type_id int unsigned not null,
+arg_desc varchar(100),
+foreign key(sv_id) references svtb(sv_id) on delete cascade on update cascade,
+foreign key(type_id) references argtypestb(type_id) on delete cascade on update cascade
+)engine=innodb default charset=utf8 auto_increment=1;
+
+
+create table svinargtb
+(
+sv_id int unsigned not null,
+arg_index int unsigned not null,
+arg_name varchar(20),
+type_id int unsigned not null,
+arg_desc varchar(100),
+foreign key(sv_id) references svtb(sv_id) on delete cascade on update cascade,
+foreign key(type_id) references argtypestb(type_id) on delete cascade on update cascade
+)engine=innodb default charset=utf8 auto_increment=1;
+
+
+
+
+
+//创建虚拟机库
+create table vmtb
+(
+vm_id int unsigned not null auto_increment,
+vm_name varchar(20) not null,
+vm_ip varchar(20) not null,
+primary key(vm_id)
+)engine=innodb default charset=utf8 auto_increment=1;
+
+
+insert into vmtb(vm_name,vm_ip) values ('uvm1','192.168.0.12');
+
+
+insert into vmtb(vm_name,vm_ip) values ('uh8','172.31.214.118');
+
+
+insert into vmtb(vm_name,vm_ip) values ('node2','192.168.2.101');
+insert into vmtb(vm_name,vm_ip) values ('node3','192.168.2.103');
+
+
+//创建argtype表
+create table argtypestb
+(
+type_id int unsigned not null auto_increment,
+typename varchar(20) not null,
+primary key(type_id)
+)engine=innodb default charset=utf8 auto_increment=1;
+
+#测试创建类型
+
+insert into argtypestb(typename) values ('string');
+insert into argtypestb(typename) values ('integer');
+insert into argtypestb(typename) values ('double');
+
+
+
+
+获取服务信息的SQL设计
+select svtb.sv_id,sv_name,svargtb.type_id,arg_index,typename from svtb,svargtb,argtypestb where svtb.sv_id = svargtb.sv_id and svargtb.type_id = argtypestb.type_id order by sv_id,arg_index;
+
+
+
+
+
+//////////////////////////////////////
+//////////////////////////////////////
+
+//创建表sv_tb--服务列表
+
+create table sv_tb
+(
+sv_id int unsigned not null  auto_increment,
+sv_name varchar(20) not null,
+authority_type int unsigned not null default 0,
+upload_date timestamp not null default CURRENT_TIMESTAMP,
+sv_url varchar(100),
+vm_id varchar(100) not null,
+user_id varchar(100) not null,
+user_name varchar(20) not null,
+sv_lang varchar(15) not null,
+sv_desc varchar(10) not null,
+primary key(sv_id)
+)engine=innodb default charset=utf8 auto_increment=1;
+
+
+
+
+//参数类型创建
+create table arg_type_tb
+(
+arg_type_id int unsigned not null auto_increment,
+arg_type_name varchar(20) not null,
+arg_type_desc varchar(20) not null,
+primary key(arg_type_id)
+)engine=innodb default charset=utf8 auto_increment=1;
+
+//服务参数表
+create table sv_arg_type_tb
+(
+sv_arg_id int unsigned not null auto_increment,
+arg_name varchar(20) not null,
+sv_id int unsigned not null,
+arg_type_id int unsigned not null,
+arg_index int unsigned not null,
+arg_direct int unsigned not null,
+foreign key(sv_id) references sv_tb(sv_id) on delete cascade on update cascade,
+foreign key(arg_type_id) references arg_type_tb(arg_type_id) on delete cascade on update cascade,
+primary key(sv_arg_id)
+)engine=innodb default charset=utf8 auto_increment=1;
+
+
+//服务权限表：
+create table sv_policy_tb
+(
+sv_policy_id int unsigned not null auto_increment,
+sv_id int unsigned not null,
+role_id int unsigned,
+user_id varchar(100),
+updata_time timestamp,
+create_time timestamp,
+sv_expires timestamp not null,
+foreign key(sv_id) references sv_tb(sv_id) on delete cascade on update cascade,
+primary key(sv_policy_id)
+)engine=innodb default charset=utf8 auto_increment=1;
+
+
+创建一个更改sv_policy_tb的创建时间的触发器
+
+create trigger t_afterinsert_on_sptb before insert on sv_policy_tb for each row set NEW.create_time=now();
+
+
+alert table sv_policy_tb add create_time
+
+
+insert into arg_type_tb(arg_type_name,arg_type_desc) values ('double','the test type:double');
+insert into arg_type_tb(arg_type_name,arg_type_desc) values ('integer','the test type:integer');
+insert into arg_type_tb(arg_type_name,arg_type_desc) values ('string','the test type:string');
+
+insert into testtb(name) values ('福建东');
+
+update user set Password = PASSWORD('max6and7') where User ='root';
+
+
+表tcdb_tb的创建
+
+create table tcdb_tb
+(
+id int unsigned not null auto_increment,
+dbname varchar(50) not null,
+user_id varchar(100) not null,
+user_name varchar(50) not null,
+vm_id varchar(50) not null,
+db_username varchar(50) not null,
+create_time timestamp not null default CURRENT_TIMESTAMP,
+expires timestamp not null,
+primary key(id)
+)engine=innodb default charset=utf8 auto_increment=1;

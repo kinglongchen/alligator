@@ -6,7 +6,7 @@ Created on 2014��6��11��
 '''
 import urllib2
 import db
-import vmmanmod_client
+from hydrogen.common import vmclient
 from MultiPartEncode import MultiPartEncode
 class RmSVManClass(object):
 	def __init__(self,db_session):
@@ -22,14 +22,14 @@ class RmSVManClass(object):
 
 	def delete_file(self,vm_ip,sv_id):
 		r = urllib2.Request("http://"+vm_ip+":8091/v1/fileundeploy/"+str(sv_id))
-		return urllib2.urlopen(r)
+		rs = urllib2.urlopen(r).read()
+		return rs
 		
-		pass
 	def addSv2Vm(self,vm_id,sv_id,sv_file,contenttype):
 		sv_id=str(sv_id)
-		vm_ip=vmmanmod_client.get_vm_ip(vm_id)
+		vm_ip=vmclient.get_vm_ip(vm_id)
 		sv_url = 'http://'+str(vm_ip)+":8091/v1/svs/"+str(sv_id)
-		
+		print sv_url
 		sv_filename=sv_id+"."+sv_file.filename.split('.')[-1].strip()
 		boundary=contenttype.split(';')[-1].split("=")[-1].strip()
 		sv_data = self.multipartencode.encode(sv_filename,sv_file,boundary)
@@ -40,7 +40,7 @@ class RmSVManClass(object):
 	def deleteSvOnVM(self,db_session,id):
 		#1.���id��÷�������vm
 		#2.����Զ�̴���--һ��webServer--ɾ��Զ��vm�ϵķ������
-		sv_vmip=db.getSvVmip(db_session, id)
-		self.delete_file(sv_vmip,id)
-		print 'delete sv On VM successuflly!!!'
-		return 'ture'
+		sv_vmip=db.getSvVmip(db_session,id)
+		print sv_vmip
+		rs=self.delete_file(sv_vmip,id)
+		return rs

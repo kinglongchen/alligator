@@ -3,6 +3,8 @@ from paste.deploy import loadapp
 import os
 import sys
 sys.path.append('..')
+print sys.path
+import hydrogen
 HOST = ''
 PORT = 8089
 config = "python_paste.ini"

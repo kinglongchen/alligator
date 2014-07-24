@@ -1,11 +1,6 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <dwsync>
-<file name="policy.json" server="192.168.0.12//root/alligator/hydrogen/" local="130479847143486655" remote="130479859070000000" Dst="0" />
-<file name="policy.json.bk" server="192.168.0.12//root/alligator/hydrogen/" local="130470967910000000" remote="130470967910000000" Dst="0" />
-<file name="policy.json.bk3" server="192.168.0.12//root/alligator/hydrogen/" local="130475289560000000" remote="130475289560000000" Dst="0" />
-<file name="policy.json.bk2" server="192.168.0.12//root/alligator/hydrogen/" local="130473774360000000" remote="130473774360000000" Dst="0" />
+<file name="policy.json" server="192.168.0.12//root/alligator/hydrogen/" local="130504713474718026" remote="130504718260000000" Dst="0" />
 <file name="policy.json" server="192.168.1.138//root/alligator/" local="130475321960000000" remote="130476505750000000" Dst="0" />
-<file name="policy.json.bk" server="192.168.1.138//root/alligator/" local="130470967910000000" remote="130476505750000000" Dst="0" />
-<file name="policy.json.bk2" server="192.168.1.138//root/alligator/" local="130473774360000000" remote="130476505750000000" Dst="0" />
-<file name="policy.json.bk3" server="192.168.1.138//root/alligator/" local="130475289560000000" remote="130476505750000000" Dst="0" />
+<file name="site_nginx.conf" server="192.168.0.12//root/alligator/hydrogen/" local="130493661612481103" remote="130494548180000000" Dst="0" />
 </dwsync>
